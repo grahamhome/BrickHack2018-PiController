@@ -1,8 +1,3 @@
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.Enumeration;
 
 /**
  * This class starts up a couple of threads to:
@@ -18,26 +13,11 @@ public class PiController {
 	public static void main(String[] args) {
 		Thread server;
 		(server = new Thread(new Server(PORT))).start();
-		try {
-			InetAddress reachableAddress = null;
-			Enumeration<InetAddress> addresses = NetworkInterface.getByName("wlan0").getInetAddresses();
-			while (addresses.hasMoreElements()) {
-				InetAddress address = addresses.nextElement();
-				if (!address.isLoopbackAddress()) {
-					reachableAddress = address;
-					break;
-				}
-			}
-			if (reachableAddress == null) {
-				System.out.println("Unable to get non-loopback IP address");
-			} else {
-				System.out.println("Successfully created a server at " + reachableAddress + " on port " + PORT);
-				server.join();
-			}
+		System.out.println("Successfully created a server");
+		try {	
+			server.join();
 		} catch (InterruptedException e) {
 			System.out.println("Error joining with server thread");
-		} catch (SocketException e) {
-			System.out.println("Error getting IP address");
 		}
 	}
 }
