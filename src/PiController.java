@@ -20,7 +20,7 @@ public class PiController {
 		(server = new Thread(new Server(PORT))).start();
 		try {
 			InetAddress reachableAddress = null;
-			Enumeration<InetAddress> addresses = NetworkInterface.getByName("WLAN0").getInetAddresses();
+			Enumeration<InetAddress> addresses = NetworkInterface.getByName("wlan0").getInetAddresses();
 			while (addresses.hasMoreElements()) {
 				InetAddress address = addresses.nextElement();
 				if (!address.isLoopbackAddress()) {
