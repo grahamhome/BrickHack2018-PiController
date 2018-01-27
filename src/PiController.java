@@ -12,7 +12,7 @@ public class PiController {
 	
 	private static final int PORT = 6789;
 
-	public static void main() {
+	public static void main(String[] args) {
 		Thread server;
 		(server = new Thread(new Server(PORT))).start();
 		try {
