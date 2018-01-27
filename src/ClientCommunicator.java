@@ -2,12 +2,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Thread to handle communications with a single client.
  * @author Graham Home
  *
  */
 public class ClientCommunicator implements Runnable {
+	
+	public AtomicBoolean running = new AtomicBoolean(true);
 	
 	private Socket clientSocket;
 	InputStream input;
@@ -23,24 +26,18 @@ public class ClientCommunicator implements Runnable {
 			input = clientSocket.getInputStream();
 			output = clientSocket.getOutputStream();
 			System.out.println("Opened connection with client " + clientSocket.getInetAddress());
-			while (!isStopped()) {
+			while (running.get()) {
 				byte[] inputData = new byte[2];
 				input.read(inputData);
 				System.out.println("Got " + (int)inputData[0] + "," + (int)inputData[1] + " from " + clientSocket.getInetAddress());
 			}
 			closeEverything();
-			return;
 		} catch (Exception e) {
 			System.out.println("Error reading from client " + clientSocket.getInetAddress());
 			closeEverything();
 			return;
 		}
 
-	}
-	
-	private boolean isStopped() {
-		// TODO: Implement an atomicboolean to be set by server thread
-		return false;
 	}
 	
 	private void closeEverything() {
