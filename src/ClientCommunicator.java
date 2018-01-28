@@ -1,6 +1,11 @@
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
 /**
@@ -14,7 +19,11 @@ public class ClientCommunicator implements Runnable {
 	
 	private Socket clientSocket;
 	InputStream input;
+	InputStreamReader inputStream;
+	BufferedReader inputStreamReader;
 	OutputStream output; 
+	OutputStreamWriter outputStream;
+	BufferedWriter outputStreamWriter;
 	
 	public ClientCommunicator(Socket client) {
 		this.clientSocket = client;
@@ -23,17 +32,21 @@ public class ClientCommunicator implements Runnable {
 	@Override
 	public void run() {
 		try {
-			input = clientSocket.getInputStream();
-			output = clientSocket.getOutputStream();
-			System.out.println("Opened connection with client " + clientSocket.getInetAddress());
+			inputStreamReader = new BufferedReader(inputStream = new InputStreamReader(input = clientSocket.getInputStream()));
+			outputStreamWriter = new BufferedWriter(outputStream = new OutputStreamWriter(output = clientSocket.getOutputStream()));
+			System.out.println("Opened connection with client " + clientSocket.getInetAddress().getHostAddress().toString());
 			while (running.get()) {
-				byte[] inputData = new byte[2];
-				input.read(inputData);
-				System.out.println("Got " + (int)inputData[0] + "," + (int)inputData[1] + " from " + clientSocket.getInetAddress());
+				String input;
+				if ((input = inputStreamReader.readLine()) != null) {
+					System.out.println("Got " + input + " from " + clientSocket.getInetAddress().getHostAddress().toString());
+					outputStreamWriter.write("Hello yourself!\n");
+					outputStreamWriter.flush();
+					System.out.println("Sent response");
+				}
 			}
 			closeEverything();
 		} catch (Exception e) {
-			System.out.println("Error reading from client " + clientSocket.getInetAddress());
+			System.out.println("Error interacting with client " + clientSocket.getInetAddress());
 			closeEverything();
 			return;
 		}
@@ -42,7 +55,11 @@ public class ClientCommunicator implements Runnable {
 	
 	private void closeEverything() {
 		try {
+			inputStreamReader.close();
+			inputStream.close();
 			input.close();
+			outputStreamWriter.close();
+			outputStream.close();
 			output.close();
 			clientSocket.close();
 		} catch (IOException e) {
