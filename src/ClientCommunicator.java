@@ -36,6 +36,11 @@ public class ClientCommunicator implements Runnable {
 			outputStreamWriter = new BufferedWriter(outputStream = new OutputStreamWriter(output = clientSocket.getOutputStream()));
 			System.out.println("Opened connection with client " + clientSocket.getInetAddress().getHostAddress().toString());
 			while (running.get()) {
+				if (inputStreamReader.read() == -1) {
+					System.out.println("Connection closed by client");
+					running.set(false);
+					break;
+				}
 				String input;
 				if ((input = inputStreamReader.readLine()) != null) {
 					System.out.println("Got " + input + " from " + clientSocket.getInetAddress().getHostAddress().toString());
