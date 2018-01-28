@@ -22,7 +22,7 @@ public class PiController {
 
 	public static void main(String[] args) {
 		Thread server;
-		(server = new Thread(new Server(PORT))).start();
+		//(server = new Thread(new Server(PORT))).start();
 		System.out.println("Successfully created a server");
 		while (true) {				
 			try {
@@ -50,10 +50,13 @@ public class PiController {
 		                Thread.sleep(waitTimeRead);
 		            }
 		        } catch (IOException ex) {
+		        	System.out.println("error 1 occured");
 		            ex.printStackTrace();
 		        } catch (InterruptedException ex) {
+		        	System.out.println("error 2 occured");
 		            ex.printStackTrace();
 		        } catch (UnsupportedBusNumberException e) {
+		        	System.out.println("error 3 occured");
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
