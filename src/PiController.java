@@ -24,15 +24,8 @@ public class PiController {
 		Thread server;
 		(server = new Thread(new Server(PORT))).start();
 		System.out.println("Successfully created a server");
-		while (true) {
-			String command = commandQueue.poll();
-			if (command != null) {
-				int x = Integer.parseInt(command.split(",")[0]);
-				int y = Integer.parseInt(command.split(",")[1]);
-				// Now you can send these coordinates to the Arduino with I2C if you want, 
-				// or use them to figure out a direction & distance command to send to the Arduino over I2C.
-			
-				try {
+		while (true) {				
+			try {
 
 		            System.out.println("Creating I2C bus");
 		            I2CBus bus = I2CFactory.getInstance(I2CBus.BUS_1);
@@ -65,6 +58,14 @@ public class PiController {
 					e.printStackTrace();
 				}
 			}
-		}
+			/*String command = commandQueue.poll();
+			if (command != null) {
+				int x = Integer.parseInt(command.split(",")[0]);
+				int y = Integer.parseInt(command.split(",")[1]);*/
+				// Now you can send these coordinates to the Arduino with I2C if you want, 
+				// or use them to figure out a direction & distance command to send to the Arduino over I2C.
+			
+
+		//}
 	}
 }
