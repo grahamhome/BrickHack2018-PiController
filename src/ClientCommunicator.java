@@ -38,6 +38,7 @@ public class ClientCommunicator implements Runnable {
 			while (running.get()) {
 				String input;
 				if ((input = inputStreamReader.readLine()) != null) {
+					PiController.commandQueue.offer(input);
 					System.out.println("Got " + input + " from " + clientSocket.getInetAddress().getHostAddress().toString());
 				} else {
 					System.out.println("Connection closed by client");
