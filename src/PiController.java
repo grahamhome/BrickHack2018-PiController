@@ -24,7 +24,7 @@ public class PiController {
 		Thread server;
 		//(server = new Thread(new Server(PORT))).start();
 		System.out.println("Successfully created a server");
-		while (true) {				
+		//while (true) {				
 			try {
 
 		            System.out.println("Creating I2C bus");
@@ -60,7 +60,7 @@ public class PiController {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}
+			//nano}
 			/*String command = commandQueue.poll();
 			if (command != null) {
 				int x = Integer.parseInt(command.split(",")[0]);
